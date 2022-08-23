@@ -1,0 +1,9 @@
+/venv
+/.idea
+/__pycache__
+bot_db
+bot_db-shm
+bot_db-wal
+logfile.log
+settings.txt
+
