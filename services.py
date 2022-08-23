@@ -237,7 +237,8 @@ async def user_callback(call: types.callback_query, state: FSMContext):
                 if user.lessons_quant == 1:
                     await call.message.edit_text(text=f"У <b><u>{user.name}</u></b> осталось последнее занятие. На какое число создать уведомление?",
                                                  reply_markup=get_notification_keyboard(user=user))
-                    return
+                    await call.answer()
+                    return user_id
             else:
                 await call.answer('Не осталось занятий')
             try:
@@ -270,7 +271,7 @@ async def user_callback(call: types.callback_query, state: FSMContext):
         case 'setName':
             await telegram_bot.UserStates.user_setName.set()
             await call.message.answer(f'Отправь новое имя для пользователя {user.name}\n\n'
-                                      f'Для отмены отправь "Отметить" или /c', reply_markup=types.ReplyKeyboardRemove)
+                                      f'Для отмены отправь "Отметить" или /c', reply_markup=types.ReplyKeyboardRemove())
 
     await call.answer()
     return user_id
