@@ -15,9 +15,19 @@ ___
 ### Работа бота
 #### Не обращайте внимания на приторность в тексте сообщений, просто было скучно)
 
-![bot working 1](https://mega.nz/file/EME3XLRJ#lYwwcJbkv67E3kqqNNsR7qq-nBbtZZ-9s9MIUTFzRHQ) 
+Чтобы ученики появились в боте, они должны написать ему хотя бы раз.
+После этого они попадают в Запросы. Далее можно подтвердить и отклонить запрос.
+И ученик переместится в определенный список.
 
-![bot working 2](https://mega.nz/file/pZESFCiQ#cDbmQZJgYulYdYld72LtJZqiaqzWnDFTYowpje1WPIA)
+![bot working 1](https://i.imgur.com/EvWXKE2.png)
+
+![bot working 2](https://i.imgur.com/368vDFJ.png)
+
+Когда остается последнее занятие бот предлагает создать уведомления для ученика на определенный день. Оно придет в выбранный день в 9:00.
+
+![bot working 3](https://i.imgur.com/0c7Xi7w.png)
+
+![bot working 3](https://i.imgur.com/NEBJZlO.png)
 
 ---
 ### Первоначальная настройка бота
