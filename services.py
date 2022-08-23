@@ -293,7 +293,7 @@ def get_notification_keyboard(user: User) -> InlineKeyboardMarkup:
     i = 1
     now = datetime.datetime.now()
     btns = [InlineKeyboardButton(text=f'{(now + datetime.timedelta(days=i+1)).strftime("%a --- %d-%m-%Y")}',
-                                 callback_data=f"notif_create_{user.id}_{i}") for i in range(7)]
+                                 callback_data=f"notif_create_{user.id}_{(now + datetime.timedelta(days=i+1)).strftime('%d-%m-%Y')}") for i in range(7)]
 
     markup.add(*btns)
     markup.add(InlineKeyboardButton(text="Не создавать", callback_data=f"notif_cancel_{user.id}_0"))
@@ -301,7 +301,7 @@ def get_notification_keyboard(user: User) -> InlineKeyboardMarkup:
 
 
 async def notification_callback(call: types.callback_query):
-    its_notification, action, user_id, days = call.data.split('_')
+    its_notification, action, user_id, day_data = call.data.split('_')
 
     user = User.get_by_id(int(user_id))
 
@@ -317,7 +317,8 @@ async def notification_callback(call: types.callback_query):
         await call.message.edit_text(get_user_info(user=user, user_type=user_types[0]),
                                      reply_markup=get_keyboard_of_user(user=user, user_type=user_types[0]))
     elif action == 'create':
-        notif_date = datetime.datetime.now() + datetime.timedelta(days=int(days))
+        day, month, year = day_data.split('-')
+        notif_date = datetime.datetime(int(year), int(month), int(day))
         notif = Notification(user=user, notification_date=notif_date)
         # notif = Notification(user=user, notification_date=datetime.datetime.now())
         notif.save()
