@@ -253,9 +253,13 @@ async def user_callback(call: types.callback_query, state: FSMContext):
             user.blocked = not user.blocked
             user.confirmed = False
             user.save()
-            await call.message.edit_text(user_list_message[user_types.index(user_type)])
-            await call.message.edit_reply_markup(get_keyboard_of_users(users=get_users_by_type(user_type=user_type),
-                                                                       user_type=user_type))
+            users = get_users_by_type(user_type=user_type)
+            if users.count() > 0:
+                await call.message.edit_text(text=user_list_message[user_types.index(user_type)],
+                                             reply_markup=get_keyboard_of_users(users=users, user_type=user_type))
+            else:
+                await call.message.edit_text(text="Пока пользователей нет :с")
+
             await call.message.answer(f'Пользователь <b><u>{user.name}</u></b> {"заблокирован" if user.blocked else "разблокирован"}')
             if user.blocked:
                 await telegram_bot.bot.send_message(chat_id=user.telegram_id, text=f'Оказалось, что нам не по пути..')
@@ -264,9 +268,15 @@ async def user_callback(call: types.callback_query, state: FSMContext):
             user.blocked = False
             user.confirmed = True
             user.save()
+            users = get_users_by_type(user_type=user_type)
+            if users.count() > 0:
+                await call.message.edit_text(text=user_list_message[user_types.index(user_type)],
+                                             reply_markup=get_keyboard_of_users(users=users, user_type=user_type))
+            else:
+                await call.message.edit_text(text="Пока пользователей нет :с")
 
             await call.message.answer(f'Пользователь <b><u>{user.name}</u></b> принят в нашу банду')
-            await telegram_bot.bot.send_message(chat_id=user.telegram_id, text=f'Добро пожаловать в нашу банду!')
+            await send_message(chat_id=user.telegram_id, text=f'Добро пожаловать в нашу банду!')
 
         case 'setName':
             await telegram_bot.UserStates.user_setName.set()
@@ -313,7 +323,7 @@ async def notification_callback(call: types.callback_query):
         await call.message.edit_text(text=f'Для <b><u>{user.name}</u></b> больше не понадобятся уведомления -_-', reply_markup=types.ReplyKeyboardRemove())
         return
 
-    if action == 'cancel' :
+    if action == 'cancel':
         await call.answer('Создание уведомления отменено')
         await call.message.edit_text(get_user_info(user=user, user_type=user_types[0]),
                                      reply_markup=get_keyboard_of_user(user=user, user_type=user_types[0]))
